@@ -139,23 +139,5 @@ https://github.com/yourusername/yourusername.github.io.git
 You're all set!
 
 
-<!-- 
-
-
-
-#### 3. Installing Dependencies
-Since Chirpy is built with Jekyll, I first needed to install Ruby and necessary Jekyll’s dependencies:
-
-For macOS (using Homebrew):
-```sh
-brew install ruby
-gem install bundler jekyll
-```
-Then, inside the project folder, I installed the necessary gems:
-```
-bundle install
-```
-
-The `bundle` command automatically installs all dependencies specified by `Gemfile`.
 
 
