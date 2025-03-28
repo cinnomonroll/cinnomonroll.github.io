@@ -2,10 +2,10 @@
 layout: post
 title:  "My First Post"
 # description:
-date: 2025-03-24 12:00:00 -0400
+date: 2025-03-24
 categories: [blog]
 tags: [jekyll, learning]
-published: true
+# published: true
 ---
 
 ## Why I Started This Blog
