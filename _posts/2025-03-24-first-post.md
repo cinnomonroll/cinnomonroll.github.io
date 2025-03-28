@@ -22,59 +22,45 @@ To generate and manage the blog, I went with Jekyll, a powerful static site gene
 
 Here’s how I set everything up, step by step:
 
-### Step 1: Setting Up GitHub Pages
-GitHub Pages allows you to host a website directly from a GitHub repository. To set it up:
+### Step 1: Creating a Repository
+I followed the guildance from the **[official docs](https://chirpy.cotes.page/posts/getting-started/)**. 
 
-- Go to GitHub and click New Repository.
-- Name it yourusername.github.io (replace yourusername with your actual GitHub username).
-- Set it to Public and check the box to initialize with a README.
+> Note: Always make sure you are using the latest version of the documentation. I accidentally followed an older version and encountered some issues.
 
-### Step 2: Installing Jekyll Locally
-Instead of starting from scratch, I forked an existing Jekyll template to save time and get a well-designed setup right away. I found a great collection of Jekyll themes on **[Jamstack Themes](https://jamstackthemes.dev/ssg/jekyll/)** and chose **"Chirpy"** because of its clean design and useful features.
+- Navigate to [Chirpy-Starter](https://github.com/cotes2020/chirpy-starter) and click **Use this template** button located in the top-right corner. Then select **Create New Repository**.
+- Name the repository `yourusername.github.io` (replace `yourusername` with your actual GitHub username).
+- Set the repository visibility to Public and check the box to initialize it with a README.
 
-#### 1. Forking the Chirpy Repository
-I went to the **[Chirpy GitHub Repository](https://github.com/cotes2020/jekyll-theme-chirpy)** and clicked the Fork button. The other way is to follow the guidance from the author[Getting Startted](https://tranglc.github.io/posts/getting-started/)
-This created a copy of the project in my own GitHub account, which I could customize as needed.
 
-#### 2. Cloning the Repository Locally
-Once I forked the repo, I cloned it to my local machine using:
-```sh
-git clone git@github.com:cinnomonroll/cinnomonroll.github.io.git
-cd cinnomonroll.github.io
+### Step 2: Setting Up the Environment
+Instead of installing Jekyll locally, I followed the recommendation to use Docker. This approach ensures that all dependencies are managed within a container, reducing setup errors. If you prefer exploring other Jekyll themes, consider browsing options at **[Jamstack Themes](https://jamstackthemes.dev/ssg/jekyll/)**
+
+- Install [Docker Desktop](https://www.docker.com/products/docker-desktop/)
+  - For MacOS users: Launch Docker and ensure you see the Docker icon in the top-right corner of your screen, which indicates that Docker is active.
+- Clone your repository within a container by following the instructions provided in[VS Code's docs](https://code.visualstudio.com/docs/devcontainers/containers#_quick-start-open-a-git-repository-or-github-pr-in-an-isolated-container-volume)
+
+If you encounter difficulties with the container setup, here's an alternative method that worked for me:
+
+1. **Clone the repository** manually and navigate to the project directory.
+2. Launch the Command Palette by pressing`Cmd + Shift + P`.
+3. **Type and select** `Dev Containers: Reopen in Container`.
+4. VS Code will: 
+  - Detect your .devcontainer folder
+  - Build the container
+  - Open the project inside the container
+5. After a few minutes, your terminal should display something similar to:
+  ```
+  `vscode ➜ /workspaces/ourusername.github.io (main)`
+  ```
+
+### Step 3:Start the Jekyll Server
+To run the site locally, use the following command:
 ```
-#### 3. Installing Dependencies
-Since Chirpy is built with Jekyll, I first needed to install Ruby and necessary Jekyll’s dependencies:
-
-For macOS (using Homebrew):
-```sh
-brew install ruby
-gem install bundler jekyll
+bundle exec jekyll s
 ```
-Then, inside the project folder, I installed the necessary gems:
-```
-bundle install
-```
+After a few seconds, the local server will be available at `http://127.0.0.1:4000`
 
-The `bundle` command automatically installs all dependencies specified by `Gemfile`.
-
-Additionally, to generate extra files like categories, tags, and last modified timestamps, Chirpy uses some tool scripts that may rely on GNU coreutils. These utilities include enhanced versions of standard Unix commands such as `date`, `readlink`, and `stat`, which behave differently on macOS by default.
-
-Since macOS uses BSD coreutils, it's recommended to install the GNU version for better compatibility:
-
-macOS
-```
-brew install coreutils
-```
-This ensures that the scripts run smoothly, especially if they use GNU-specific flags or behavior.
-
-#### 4. Running the Blog Locally
-To preview the blog before deploying, I started the local Jekyll server:
-```
-bundle exec jekyll serve
-```
-Now, I could see the blog running at `http://localhost:4000/` in my browser.
-
-#### 5: Writing and Customizing the Blog
+### Step 4:Writing and Customizing the Blog
 Once the blog was running, I started customizing it to make it my own. Here are some key customizations I made:
 
 ✔ **Updating Blog Info in `_config.yml`**
@@ -83,7 +69,7 @@ The **`_config.yml`** file contains the blog’s main settings. I updated it wit
 
 > Note: After making changes to **`_config.yml`** you need to restart the local server for it to take effect:
 > ```
-> bundle exec jekyll serve
+> bundle exec jekyll s
 > ```
 
 ✔ **Uploading an Avatar**
@@ -116,11 +102,60 @@ tags: [jekyll, customization]
 
 This is my first blog post! 🚀
 ```
-Once the post is added, Jekyll will automatically display it on the blog.
+
+### Step 5: Deploy Using Github Actions
+To configure the GitHub Pages service, follow these steps:
+- Go to your repository and select **Settings**
+- Click on **Pages** in the left navigation bar 
+- In the **Source** section, select **`GitHub Actions`** from the dropdown menu.
+- Push any commits to GitHub to trigger the Actions workflow. 
+
+Once the build is complete and successful, the site will be deployed automatically!
+
+#### Troubleshooting Git Remote URL Issues
+
+I encountered an issue where Git automatically rewrote URLs starting with `https://github.com/` to `git@github.com:`. EvenEven forcing HTTPS didn't work. To resolve this:
+
+1. Check the Global "insteadOf" Rule:
+```
+git config --global --get-regexp "url.*insteadOf"
+```
+This command outputs a rule indicating that Git is rewriting `https://github.com/` to `git@github.com:`
+
+2. Remove the Rule:
+```
+git config --global --unset-all url.git@github.com:.insteadof
+```
+3. Verify the Remote URL:
+```
+git remote get-url origin
+```
+
+You should see:
+```
+https://github.com/yourusername/yourusername.github.io.git
+```
+
+You're all set!
+
+
+<!-- 
 
 
 
+#### 3. Installing Dependencies
+Since Chirpy is built with Jekyll, I first needed to install Ruby and necessary Jekyll’s dependencies:
 
+For macOS (using Homebrew):
+```sh
+brew install ruby
+gem install bundler jekyll
+```
+Then, inside the project folder, I installed the necessary gems:
+```
+bundle install
+```
 
-For more setting details **[Chirpy Doc](https://chirpy.cotes.page)**
+The `bundle` command automatically installs all dependencies specified by `Gemfile`.
+
 
