@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "My First Post"
+title:  "Set Up Blog on GitHub Page using Jekyll"
 # description:
 date: 2025-03-24
 categories: [blog]
